@@ -18,7 +18,6 @@
 @property(nonatomic) CGFloat thicknessRatio;
 @property(nonatomic) CGFloat progress;
 @property(nonatomic) NSInteger clockwiseProgress;
-@property (nonatomic, copy) void (^completionBlock)(void);
 
 @end
 
@@ -120,6 +119,8 @@
 
 @interface DACircularProgressView ()
 
+@property (nonatomic, copy) void (^completionBlock)(void);
+
 @end
 
 @implementation DACircularProgressView
@@ -169,14 +170,14 @@
     return self.circularProgressLayer.progress;
 }
 
-- (void)setProgress:(CGFloat)progress
+- (void)setProgress:(CGFloat)progress onCompletion:(void (^)(void))completionBlock
 {
-    [self setProgress:progress animated:NO];
+    [self setProgress:progress animated:NO onCompletion:completionBlock];
 }
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated onCompletion:(void (^)(void))completionBlock
 {
-    [self setProgress:progress animated:animated initialDelay:0.0];
+    [self setProgress:progress animated:animated initialDelay:0.0 onCompletion:completionBlock];
 }
 
 - (void)setProgress:(CGFloat)progress
@@ -210,8 +211,8 @@
    NSNumber *pinnedProgressNumber = [animation valueForKey:@"toValue"];
    self.circularProgressLayer.progress = [pinnedProgressNumber floatValue];
     
-    if (completionBlock) {
-        completionBlock();
+    if (self.completionBlock) {
+        self.completionBlock();
     }
 }
 
