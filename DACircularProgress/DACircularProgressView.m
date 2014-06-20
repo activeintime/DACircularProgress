@@ -212,7 +212,7 @@
    self.circularProgressLayer.progress = [pinnedProgressNumber floatValue];
     
     if (self.completionBlock) {
-        completionBlock();
+        self.completionBlock();
     }
 }
 
