@@ -170,9 +170,9 @@
     return self.circularProgressLayer.progress;
 }
 
-- (void)setProgress:(CGFloat)progress onCompletion:(void (^)(void))completionBlock
+- (void)setProgress:(CGFloat)progress
 {
-    [self setProgress:progress animated:NO onCompletion:completionBlock];
+    [self setProgress:progress animated:NO onCompletion:nil];
 }
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated onCompletion:(void (^)(void))completionBlock
@@ -212,7 +212,7 @@
    self.circularProgressLayer.progress = [pinnedProgressNumber floatValue];
     
     if (self.completionBlock) {
-        self.completionBlock();
+        completionBlock();
     }
 }
 
