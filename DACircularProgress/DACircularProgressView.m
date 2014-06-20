@@ -18,6 +18,7 @@
 @property(nonatomic) CGFloat thicknessRatio;
 @property(nonatomic) CGFloat progress;
 @property(nonatomic) NSInteger clockwiseProgress;
+@property (nonatomic, copy) void (^completionBlock)(void);
 
 @end
 
@@ -173,7 +174,7 @@
     [self setProgress:progress animated:NO];
 }
 
-- (void)setProgress:(CGFloat)progress animated:(BOOL)animated
+- (void)setProgress:(CGFloat)progress animated:(BOOL)animated onCompletion:(void (^)(void))completionBlock
 {
     [self setProgress:progress animated:animated initialDelay:0.0];
 }
@@ -181,7 +182,10 @@
 - (void)setProgress:(CGFloat)progress
            animated:(BOOL)animated
        initialDelay:(CFTimeInterval)initialDelay
+       onCompletion:(void (^)(void))completionBlock
 {
+    self.completionBlock = completionBlock;
+    
     [self.layer removeAnimationForKey:@"indeterminateAnimation"];
     [self.circularProgressLayer removeAnimationForKey:@"progress"];
     
@@ -205,6 +209,10 @@
 {
    NSNumber *pinnedProgressNumber = [animation valueForKey:@"toValue"];
    self.circularProgressLayer.progress = [pinnedProgressNumber floatValue];
+    
+    if (completionBlock) {
+        completionBlock();
+    }
 }
 
 #pragma mark - UIAppearance methods
